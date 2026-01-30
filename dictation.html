@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <title>英文单词听写 - 听音写单词</title>
     <style>
         * {
@@ -11,16 +11,23 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Comic Sans MS', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
             background: linear-gradient(135deg, #F5E6F0 0%, #E8DDF0 50%, #F0E6F5 100%);
-            min-height: 100vh;
-            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px;
+            box-sizing: border-box;
             overflow: hidden;
+            /* 兼容iOS Safari */
+            min-height: -webkit-fill-available;
         }
 
         .container {
@@ -29,11 +36,13 @@
             box-shadow: 0 15px 50px rgba(200, 150, 200, 0.15);
             max-width: 500px;
             width: 100%;
-            height: calc(100vh - 20px);
+            height: 100%;
+            max-height: -webkit-fill-available;
             overflow: hidden;
             border: 3px solid #E8D5E8;
             display: flex;
             flex-direction: column;
+            box-sizing: border-box;
         }
 
         .header {
@@ -483,34 +492,63 @@
 
         @media (max-width: 480px) {
             body {
-                padding: 15px;
+                padding: 5px;
             }
 
             .container {
-                border-radius: 25px;
+                border-radius: 15px;
                 border-width: 2px;
             }
 
             .header {
-                padding: 30px 15px;
+                padding: 12px 10px;
             }
 
             .header h1 {
-                font-size: 26px;
+                font-size: 18px;
+                margin-bottom: 2px;
+            }
+
+            .header p {
+                font-size: 11px;
+            }
+
+            .header::before,
+            .header::after {
+                font-size: 16px;
+                top: 10px;
             }
 
             .content {
-                padding: 20px 15px;
+                padding: 10px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .progress-bar {
+                margin-bottom: 8px;
+            }
+
+            .progress-info {
+                font-size: 12px;
+                margin-bottom: 6px;
             }
 
             .chinese-word {
-                font-size: 48px;
+                font-size: 38px;
+                margin-bottom: 5px;
+            }
+
+            .phonetic {
+                font-size: 14px;
+                margin-bottom: 10px;
             }
 
             .play-btn {
-                width: 120px;
-                height: 120px;
-                font-size: 60px;
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
             }
 
             .result-stats {
@@ -534,37 +572,13 @@
             }
 
             .btn {
-                padding: 12px;
-                font-size: 14px;
+                padding: 8px 5px;
+                font-size: 12px;
             }
 
             .button-group.three-cols {
                 grid-template-columns: 1fr 1fr 1fr;
-                gap: 8px;
-            }
-
-            .header {
-                padding: 15px 10px;
-            }
-
-            .header h1 {
-                font-size: 20px;
-                margin-bottom: 4px;
-            }
-
-            .header p {
-                font-size: 12px;
-            }
-
-            .content {
-                padding: 12px 12px;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .progress-bar {
-                margin-bottom: 12px;
+                gap: 6px;
             }
 
             .word-display {
@@ -576,37 +590,16 @@
             }
 
             .word-number {
-                margin-bottom: 10px;
-                font-size: 12px;
-            }
-
-            .chinese-word {
-                font-size: 36px;
-                margin-bottom: 8px;
-            }
-
-            .phonetic {
-                font-size: 14px;
-                margin-bottom: 15px;
-            }
-
-            .play-btn {
-                width: 80px;
-                height: 80px;
-                font-size: 40px;
+                font-size: 11px;
+                margin-bottom: 5px;
             }
 
             .countdown-container {
-                margin-top: 15px;
+                margin-top: 10px;
             }
 
             .countdown-text {
-                font-size: 12px;
-            }
-
-            .btn {
-                padding: 10px 5px;
-                font-size: 13px;
+                font-size: 11px;
             }
         }
     </style>
