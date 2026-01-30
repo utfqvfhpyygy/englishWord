@@ -15,28 +15,34 @@
             font-family: 'Comic Sans MS', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
             background: linear-gradient(135deg, #F5E6F0 0%, #E8DDF0 50%, #F0E6F5 100%);
             min-height: 100vh;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
+            overflow: hidden;
         }
 
         .container {
             background: linear-gradient(to bottom, #ffffff 0%, #FAF7FC 100%);
-            border-radius: 30px;
+            border-radius: 20px;
             box-shadow: 0 15px 50px rgba(200, 150, 200, 0.15);
             max-width: 500px;
             width: 100%;
+            height: calc(100vh - 20px);
             overflow: hidden;
             border: 3px solid #E8D5E8;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             background: linear-gradient(135deg, #D8A8D8 0%, #E8C8E8 100%);
             color: white;
-            padding: 35px 20px;
+            padding: 20px 15px;
             text-align: center;
             position: relative;
+            flex-shrink: 0;
         }
 
         .header::before {
@@ -76,7 +82,10 @@
 
         .content {
             padding: 20px 15px;
-            min-height: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
         }
 
         /* 页面切换 */
@@ -85,7 +94,9 @@
         }
 
         .page.active {
-            display: block;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
 
         /* 首页样式 */
@@ -256,8 +267,11 @@
 
         .word-display {
             text-align: center;
-            margin-bottom: 20px;
-            margin-top: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .word-number {
@@ -544,7 +558,9 @@
 
             .content {
                 padding: 12px 12px;
-                min-height: auto;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
             }
 
             .progress-bar {
@@ -552,8 +568,11 @@
             }
 
             .word-display {
-                margin-top: 10px;
-                margin-bottom: 15px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
             }
 
             .word-number {
@@ -703,6 +722,7 @@
         let countdownTimer = null;
         let countdownInterval = null;
         let remainingTime = COUNTDOWN_SECONDS;
+        let autoPlayEnabled = true; // 是否启用自动播放（10秒、5秒时）
 
         // 从JSON文件加载单词数据
         async function loadUnitData(unitName) {
@@ -838,15 +858,18 @@
             // 更新按钮
             document.getElementById("prevBtn").disabled = index === 0;
 
-            // 自动播放
-            setTimeout(() => playSound(), 300);
+            // 自动播放（开始时播放一次）
+            setTimeout(() => playSoundAuto(), 300);
 
             // 启动倒计时
             startCountdown();
         }
 
-        // 播放发音
-        function playSound() {
+        // 音频对象（用于有道词典发音）
+        let audioPlayer = null;
+
+        // 播放发音（核心函数）
+        function playSoundCore() {
             if (!state.words || state.words.length === 0) {
                 console.error("No words loaded");
                 return;
@@ -860,24 +883,39 @@
 
             console.log("Playing word:", word.english);
 
-            const utterance = new SpeechSynthesisUtterance(word.english);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.8;
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
+            // 使用有道词典API播放发音（美音）
+            const audioUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word.english)}&type=1`;
 
-            // 添加事件监听以调试
-            utterance.onstart = () => console.log("Speech started");
-            utterance.onend = () => console.log("Speech ended");
-            utterance.onerror = (e) => console.error("Speech error:", e);
+            if (audioPlayer) {
+                audioPlayer.pause();
+            }
+            audioPlayer = new Audio(audioUrl);
+            audioPlayer.play().catch(e => {
+                console.error("Audio play failed, fallback to speechSynthesis:", e);
+                // 如果有道API失败，回退到浏览器TTS
+                const utterance = new SpeechSynthesisUtterance(word.english);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                window.speechSynthesis.speak(utterance);
+            });
+        }
 
-            window.speechSynthesis.speak(utterance);
+        // 用户手动点击播放（取消后续自动播放）
+        function playSound() {
+            autoPlayEnabled = false; // 取消10秒、5秒的自动播放
+            playSoundCore();
+        }
+
+        // 自动播放（开始时、10秒、5秒）
+        function playSoundAuto() {
+            playSoundCore();
         }
 
         // 启动倒计时
         function startCountdown() {
             stopCountdown();
             remainingTime = COUNTDOWN_SECONDS;
+            autoPlayEnabled = true; // 重置自动播放
             let played10 = false;
             let played5 = false;
             updateCountdownDisplay();
@@ -886,16 +924,16 @@
                 remainingTime -= 0.1;
                 updateCountdownDisplay();
 
-                // 第10秒时播放语音
-                if (!played10 && remainingTime <= 10 && remainingTime > 9.9) {
+                // 第10秒时播放语音（如果自动播放未被取消）
+                if (autoPlayEnabled && !played10 && remainingTime <= 10 && remainingTime > 9.9) {
                     played10 = true;
-                    playSound();
+                    playSoundAuto();
                 }
 
-                // 第5秒时播放语音
-                if (!played5 && remainingTime <= 5 && remainingTime > 4.9) {
+                // 第5秒时播放语音（如果自动播放未被取消）
+                if (autoPlayEnabled && !played5 && remainingTime <= 5 && remainingTime > 4.9) {
                     played5 = true;
-                    playSound();
+                    playSoundAuto();
                 }
 
                 if (remainingTime <= 0) {
