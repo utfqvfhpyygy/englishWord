@@ -715,6 +715,11 @@
                             <span>Unit 3</span>
                             <span class="unit-progress" id="progress-unit3">0/0</span>
                         </button>
+                        <button class="unit-btn" data-unit="unit4">
+                            <span class="unit-icon">📝</span>
+                            <span>Unit 4</span>
+                            <span class="unit-progress" id="progress-unit4">0/0</span>
+                        </button>
                     </div>
                 </div>
 
@@ -810,11 +815,11 @@
                 if (saved) {
                     state.learnedWords = JSON.parse(saved);
                 } else {
-                    state.learnedWords = { unit1: [], unit2: [], unit3: [] };
+                    state.learnedWords = { unit1: [], unit2: [], unit3: [], unit4: [] };
                 }
             } catch (e) {
                 console.error("Failed to load learned words:", e);
-                state.learnedWords = { unit1: [], unit2: [], unit3: [] };
+                state.learnedWords = { unit1: [], unit2: [], unit3: [], unit4: [] };
             }
         }
 
@@ -869,7 +874,7 @@
 
         // 更新首页进度显示
         function updateProgressDisplay() {
-            ["unit1", "unit2", "unit3"].forEach(unitName => {
+            ["unit1", "unit2", "unit3", "unit4"].forEach(unitName => {
                 const unitData = state.unitData[unitName];
                 const total = unitData && unitData.words ? unitData.words.length : 0;
                 const learned = state.learnedWords[unitName] ? state.learnedWords[unitName].length : 0;
@@ -934,6 +939,7 @@
                 state.unitData.unit1 = await loadUnitData("unit1");
                 state.unitData.unit2 = await loadUnitData("unit2");
                 state.unitData.unit3 = await loadUnitData("unit3");
+                state.unitData.unit4 = await loadUnitData("unit4");
 
                 // 检查是否成功加载
                 const loadedUnits = Object.entries(state.unitData)

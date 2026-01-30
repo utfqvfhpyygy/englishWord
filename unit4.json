@@ -1,0 +1,21 @@
+{
+  "id": "unit4",
+  "name": "Unit 4",
+  "icon": "📝",
+  "words": [
+    { "english": "basketball", "chinese": "篮球", "phonetic": "/ˈbæskɪtbɔːl/" },
+    { "english": "ping-pong", "chinese": "乒乓球", "phonetic": "/ˈpɪŋ pɒŋ/" },
+    { "english": "month", "chinese": "月份", "phonetic": "/mʌnθ/" },
+    { "english": "Tuesday", "chinese": "星期二", "phonetic": "/ˈtuːzdeɪ/" },
+    { "english": "Wednesday", "chinese": "星期三", "phonetic": "/ˈwenzdeɪ/" },
+    { "english": "Thursday", "chinese": "星期四", "phonetic": "/ˈθɜːrzdeɪ/" },
+    { "english": "Friday", "chinese": "星期五", "phonetic": "/ˈfraɪdeɪ/" },
+    { "english": "start", "chinese": "开始", "phonetic": "/stɑːrt/" },
+    { "english": "by", "chinese": "乘坐", "phonetic": "/baɪ/" },
+    { "english": "train", "chinese": "火车", "phonetic": "/treɪn/" },
+    { "english": "catch", "chinese": "抓住；赶上", "phonetic": "/kætʃ/" },
+    { "english": "tired", "chinese": "疲倦的", "phonetic": "/ˈtaɪərd/" },
+    { "english": "everything", "chinese": "一切；所有事物", "phonetic": "/ˈevriθɪŋ/" },
+    { "english": "less", "chinese": "更少的", "phonetic": "/les/" }
+  ]
+}
