@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitialize project with product specification\n\n- Add PRODUCT_SPEC.md with complete feature design for English word learning app\n- App targets mobile-first experience for elementary school students\n- Features include: Study mode, Practice mode, Quiz mode with gamification\n- Core engagement mechanics: Streak system, leveling, achievements, leaderboards\n- Designed to make students actively want to review and practice vocabulary\n\nCo-Authored-By: Claude Haiku 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}
