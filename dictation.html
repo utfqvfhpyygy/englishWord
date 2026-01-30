@@ -75,8 +75,8 @@
         }
 
         .content {
-            padding: 30px 20px;
-            min-height: 400px;
+            padding: 20px 15px;
+            min-height: auto;
         }
 
         /* 页面切换 */
@@ -256,8 +256,8 @@
 
         .word-display {
             text-align: center;
-            margin-bottom: 40px;
-            margin-top: 50px;
+            margin-bottom: 20px;
+            margin-top: 15px;
         }
 
         .word-number {
@@ -276,21 +276,21 @@
         }
 
         .phonetic {
-            font-size: 18px;
+            font-size: 16px;
             color: #D8C5D8;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             font-style: italic;
             font-weight: 500;
         }
 
         .play-btn {
-            width: 140px;
-            height: 140px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: linear-gradient(135deg, #C89AB8 0%, #D8C5D8 100%);
             color: white;
-            border: 4px solid rgba(255, 255, 255, 0.8);
-            font-size: 70px;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            font-size: 50px;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
@@ -312,13 +312,13 @@
         .button-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            margin-top: 15px;
         }
 
         /* 倒计时样式 */
         .countdown-container {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: center;
         }
 
@@ -525,27 +525,69 @@
             }
 
             .button-group.three-cols {
-                grid-template-columns: 1fr;
-                gap: 10px;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 8px;
+            }
+
+            .header {
+                padding: 15px 10px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+
+            .header p {
+                font-size: 12px;
+            }
+
+            .content {
+                padding: 12px 12px;
+                min-height: auto;
+            }
+
+            .progress-bar {
+                margin-bottom: 12px;
             }
 
             .word-display {
-                margin-top: 30px;
-                margin-bottom: 25px;
+                margin-top: 10px;
+                margin-bottom: 15px;
+            }
+
+            .word-number {
+                margin-bottom: 10px;
+                font-size: 12px;
             }
 
             .chinese-word {
-                font-size: 42px;
+                font-size: 36px;
+                margin-bottom: 8px;
+            }
+
+            .phonetic {
+                font-size: 14px;
+                margin-bottom: 15px;
             }
 
             .play-btn {
-                width: 100px;
-                height: 100px;
-                font-size: 50px;
+                width: 80px;
+                height: 80px;
+                font-size: 40px;
             }
 
             .countdown-container {
-                margin-top: 20px;
+                margin-top: 15px;
+            }
+
+            .countdown-text {
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 10px 5px;
+                font-size: 13px;
             }
         }
     </style>
@@ -836,11 +878,25 @@
         function startCountdown() {
             stopCountdown();
             remainingTime = COUNTDOWN_SECONDS;
+            let played10 = false;
+            let played5 = false;
             updateCountdownDisplay();
 
             countdownInterval = setInterval(() => {
                 remainingTime -= 0.1;
                 updateCountdownDisplay();
+
+                // 第10秒时播放语音
+                if (!played10 && remainingTime <= 10 && remainingTime > 9.9) {
+                    played10 = true;
+                    playSound();
+                }
+
+                // 第5秒时播放语音
+                if (!played5 && remainingTime <= 5 && remainingTime > 4.9) {
+                    played5 = true;
+                    playSound();
+                }
 
                 if (remainingTime <= 0) {
                     stopCountdown();
