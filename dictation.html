@@ -490,6 +490,89 @@
             gap: 12px;
         }
 
+        /* 单元进度显示 */
+        .unit-progress {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .unit-btn.active .unit-progress {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* 重置按钮 */
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #C89AB8;
+            border: 2px solid #E8D5E8;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #F7F0F7;
+            border-color: #C89AB8;
+        }
+
+        /* 结果页不会按钮 */
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #E8DFE8;
+        }
+
+        .result-item-content {
+            flex: 1;
+        }
+
+        .mark-unknown-btn {
+            padding: 6px 12px;
+            background: white;
+            color: #C89AB8;
+            border: 1px solid #E8D5E8;
+            border-radius: 12px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .mark-unknown-btn:hover {
+            background: #F7F0F7;
+            border-color: #C89AB8;
+        }
+
+        .mark-unknown-btn.marked {
+            background: #FFE5E5;
+            color: #E57373;
+            border-color: #E57373;
+        }
+
+        /* 剩余提示 */
+        .remaining-info {
+            text-align: center;
+            padding: 10px;
+            background: #F7F0F7;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #C89AB8;
+        }
+
+        .remaining-info.complete {
+            background: #E8F5E9;
+            color: #4CAF50;
+        }
+
         @media (max-width: 480px) {
             body {
                 padding: 5px;
@@ -620,17 +703,22 @@
                         <button class="unit-btn active" data-unit="unit1">
                             <span class="unit-icon">📚</span>
                             <span>Unit 1</span>
+                            <span class="unit-progress" id="progress-unit1">0/0</span>
                         </button>
                         <button class="unit-btn" data-unit="unit2">
                             <span class="unit-icon">📖</span>
                             <span>Unit 2</span>
+                            <span class="unit-progress" id="progress-unit2">0/0</span>
                         </button>
                         <button class="unit-btn" data-unit="unit3">
                             <span class="unit-icon">✏️</span>
                             <span>Unit 3</span>
+                            <span class="unit-progress" id="progress-unit3">0/0</span>
                         </button>
                     </div>
                 </div>
+
+                <div class="remaining-info" id="remainingInfo">剩余 0 个单词未学习</div>
 
                 <div class="count-selector">
                     <label>选择单词数量</label>
@@ -642,6 +730,7 @@
                 </div>
 
                 <button class="start-btn" id="startBtn">开始听写</button>
+                <button class="reset-btn" id="resetBtn">重置学习进度</button>
             </div>
 
             <!-- 听写页面 -->
@@ -707,8 +796,113 @@
             selectedCount: 10,
             currentWordIndex: 0,
             words: [],
-            unitData: {}
+            unitData: {},
+            learnedWords: {} // 已学习的单词 { unit1: ["sun", "moon"], unit2: [...] }
         };
+
+        // localStorage 键名
+        const STORAGE_KEY = "dictation_learned_words";
+
+        // 从localStorage加载已学习的单词
+        function loadLearnedWords() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    state.learnedWords = JSON.parse(saved);
+                } else {
+                    state.learnedWords = { unit1: [], unit2: [], unit3: [] };
+                }
+            } catch (e) {
+                console.error("Failed to load learned words:", e);
+                state.learnedWords = { unit1: [], unit2: [], unit3: [] };
+            }
+        }
+
+        // 保存已学习的单词到localStorage
+        function saveLearnedWords() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state.learnedWords));
+            } catch (e) {
+                console.error("Failed to save learned words:", e);
+            }
+        }
+
+        // 获取某单元未学习的单词
+        function getUnlearnedWords(unitName) {
+            const unitData = state.unitData[unitName];
+            if (!unitData || !unitData.words) return [];
+
+            const learned = state.learnedWords[unitName] || [];
+            return unitData.words.filter(word => !learned.includes(word.english));
+        }
+
+        // 标记单词为已学习
+        function markAsLearned(unitName, englishWord) {
+            if (!state.learnedWords[unitName]) {
+                state.learnedWords[unitName] = [];
+            }
+            if (!state.learnedWords[unitName].includes(englishWord)) {
+                state.learnedWords[unitName].push(englishWord);
+                saveLearnedWords();
+            }
+        }
+
+        // 标记单词为不会（从已学习中移除）
+        function markAsUnknown(unitName, englishWord) {
+            if (state.learnedWords[unitName]) {
+                state.learnedWords[unitName] = state.learnedWords[unitName].filter(w => w !== englishWord);
+                saveLearnedWords();
+            }
+        }
+
+        // 重置某单元的学习进度
+        function resetUnitProgress(unitName) {
+            state.learnedWords[unitName] = [];
+            saveLearnedWords();
+        }
+
+        // 重置所有学习进度
+        function resetAllProgress() {
+            state.learnedWords = { unit1: [], unit2: [], unit3: [] };
+            saveLearnedWords();
+        }
+
+        // 更新首页进度显示
+        function updateProgressDisplay() {
+            ["unit1", "unit2", "unit3"].forEach(unitName => {
+                const unitData = state.unitData[unitName];
+                const total = unitData && unitData.words ? unitData.words.length : 0;
+                const learned = state.learnedWords[unitName] ? state.learnedWords[unitName].length : 0;
+                const progressEl = document.getElementById(`progress-${unitName}`);
+                if (progressEl) {
+                    progressEl.textContent = `${learned}/${total}`;
+                }
+            });
+            updateRemainingInfo();
+        }
+
+        // 更新剩余单词提示
+        function updateRemainingInfo() {
+            const unlearned = getUnlearnedWords(state.selectedUnit);
+            const infoEl = document.getElementById("remainingInfo");
+            const startBtn = document.getElementById("startBtn");
+
+            if (unlearned.length === 0) {
+                infoEl.textContent = "🎉 本单元已全部学完！";
+                infoEl.className = "remaining-info complete";
+                startBtn.textContent = "已全部学完";
+                startBtn.disabled = true;
+            } else {
+                infoEl.textContent = `剩余 ${unlearned.length} 个单词未学习`;
+                infoEl.className = "remaining-info";
+                startBtn.disabled = false;
+                if (unlearned.length < state.selectedCount) {
+                    startBtn.textContent = `学习剩余 ${unlearned.length} 个`;
+                } else {
+                    startBtn.textContent = "开始听写";
+                }
+            }
+        }
 
         // 倒计时相关
         const COUNTDOWN_SECONDS = 15;
@@ -765,8 +959,10 @@
 
         // 初始化
         async function init() {
+            loadLearnedWords();
             await initializeUnits();
             setupEventListeners();
+            updateProgressDisplay();
         }
 
         // 事件监听
@@ -781,6 +977,7 @@
             });
 
             document.getElementById("startBtn").addEventListener("click", startDictation);
+            document.getElementById("resetBtn").addEventListener("click", handleReset);
 
             // 听写页面
             document.getElementById("playBtn").addEventListener("click", playSound);
@@ -793,15 +990,25 @@
             document.getElementById("homeBtn").addEventListener("click", goHome);
         }
 
+        // 重置进度处理
+        function handleReset() {
+            if (confirm("确定要重置所有学习进度吗？")) {
+                resetAllProgress();
+                updateProgressDisplay();
+            }
+        }
+
         // 首页逻辑
         function selectUnit(unit, btn) {
             state.selectedUnit = unit;
             document.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
+            updateRemainingInfo();
         }
 
         function selectCount(count, btn) {
             state.selectedCount = parseInt(count);
+            updateRemainingInfo();
             document.querySelectorAll(".count-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
         }
@@ -821,14 +1028,21 @@
                 return;
             }
 
-            const allWords = unitData.words;
+            // 获取未学习的单词
+            const unlearnedWords = getUnlearnedWords(state.selectedUnit);
             state.currentWordIndex = 0;
 
-            console.log(`Total words in unit: ${allWords.length}, selected count: ${state.selectedCount}`);
+            if (unlearnedWords.length === 0) {
+                alert("本单元已全部学完！请重置进度后再试。");
+                return;
+            }
 
-            // 随机选择单词
-            const shuffled = [...allWords].sort(() => Math.random() - 0.5);
-            state.words = shuffled.slice(0, state.selectedCount);
+            console.log(`Unlearned words: ${unlearnedWords.length}, selected count: ${state.selectedCount}`);
+
+            // 随机选择单词（从未学习的中选）
+            const shuffled = [...unlearnedWords].sort(() => Math.random() - 0.5);
+            const selectCount = Math.min(state.selectedCount, unlearnedWords.length);
+            state.words = shuffled.slice(0, selectCount);
 
             console.log("Selected words:", state.words);
 
@@ -1014,9 +1228,14 @@
             stopCountdown();
             showPage("result");
 
+            // 将本次学习的单词标记为已学习
+            state.words.forEach(word => {
+                markAsLearned(state.selectedUnit, word.english);
+            });
+
             document.getElementById("totalCount").textContent = state.words.length;
 
-            // 渲染单词列表
+            // 渲染单词列表（带不会按钮）
             const resultList = document.getElementById("resultList");
             resultList.innerHTML = "";
 
@@ -1024,11 +1243,32 @@
                 const item = document.createElement("div");
                 item.className = "result-item";
                 item.innerHTML = `
-                    <div class="result-english">${index + 1}. ${word.english}</div>
-                    <div class="result-phonetic">${word.phonetic}</div>
-                    <div class="result-chinese">${word.chinese}</div>
+                    <div class="result-item-content">
+                        <div class="result-english">${index + 1}. ${word.english}</div>
+                        <div class="result-phonetic">${word.phonetic}</div>
+                        <div class="result-chinese">${word.chinese}</div>
+                    </div>
+                    <button class="mark-unknown-btn" data-word="${word.english}">不会</button>
                 `;
                 resultList.appendChild(item);
+            });
+
+            // 绑定不会按钮事件
+            resultList.querySelectorAll(".mark-unknown-btn").forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const wordEnglish = this.dataset.word;
+                    if (this.classList.contains("marked")) {
+                        // 取消标记，重新标记为已学习
+                        markAsLearned(state.selectedUnit, wordEnglish);
+                        this.classList.remove("marked");
+                        this.textContent = "不会";
+                    } else {
+                        // 标记为不会
+                        markAsUnknown(state.selectedUnit, wordEnglish);
+                        this.classList.add("marked");
+                        this.textContent = "已标记";
+                    }
+                });
             });
 
             // 显示随机鼓励语言
@@ -1041,6 +1281,7 @@
         function goHome() {
             stopCountdown();
             showPage("home");
+            updateProgressDisplay();
         }
 
         // 切换页面
