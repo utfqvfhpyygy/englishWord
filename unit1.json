@@ -1,0 +1,22 @@
+{
+  "id": "unit1",
+  "name": "Unit 1",
+  "icon": "📚",
+  "words": [
+    { "english": "sun", "chinese": "太阳", "phonetic": "/sʌn/" },
+    { "english": "wind", "chinese": "风", "phonetic": "/wɪnd/" },
+    { "english": "grass", "chinese": "草", "phonetic": "/ɡrɑːs/" },
+    { "english": "grow", "chinese": "生长", "phonetic": "/ɡroʊ/" },
+    { "english": "bamboo", "chinese": "竹子", "phonetic": "/bæmˈbuː/" },
+    { "english": "winter", "chinese": "冬天", "phonetic": "/ˈwɪntər/" },
+    { "english": "summer", "chinese": "夏天", "phonetic": "/ˈsʌmər/" },
+    { "english": "star", "chinese": "星星", "phonetic": "/stɑːr/" },
+    { "english": "rose", "chinese": "玫瑰花", "phonetic": "/roʊz/" },
+    { "english": "umbrella", "chinese": "伞", "phonetic": "/ʌmˈbrelə/" },
+    { "english": "strong", "chinese": "强壮的", "phonetic": "/strɔːŋ/" },
+    { "english": "tall", "chinese": "高的", "phonetic": "/tɔːl/" },
+    { "english": "thin", "chinese": "瘦的", "phonetic": "/θɪn/" },
+    { "english": "easy", "chinese": "容易的", "phonetic": "/ˈiːzi/" },
+    { "english": "those", "chinese": "那些", "phonetic": "/ðoʊz/" }
+  ]
+}

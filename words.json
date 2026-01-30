@@ -1,0 +1,250 @@
+{
+  "units": [
+    {
+      "id": "family",
+      "name": "家庭成员",
+      "icon": "🏠",
+      "words": [
+        {
+          "id": "family_001",
+          "english": "father",
+          "chinese": "父亲"
+        },
+        {
+          "id": "family_002",
+          "english": "mother",
+          "chinese": "母亲"
+        },
+        {
+          "id": "family_003",
+          "english": "sister",
+          "chinese": "姐姐/妹妹"
+        },
+        {
+          "id": "family_004",
+          "english": "brother",
+          "chinese": "哥哥/弟弟"
+        },
+        {
+          "id": "family_005",
+          "english": "grandmother",
+          "chinese": "祖母/外婆"
+        },
+        {
+          "id": "family_006",
+          "english": "grandfather",
+          "chinese": "祖父/外公"
+        },
+        {
+          "id": "family_007",
+          "english": "uncle",
+          "chinese": "叔叔/舅舅"
+        },
+        {
+          "id": "family_008",
+          "english": "aunt",
+          "chinese": "阿姨/舅妈"
+        },
+        {
+          "id": "family_009",
+          "english": "cousin",
+          "chinese": "表亲/堂亲"
+        },
+        {
+          "id": "family_010",
+          "english": "son",
+          "chinese": "儿子"
+        },
+        {
+          "id": "family_011",
+          "english": "daughter",
+          "chinese": "女儿"
+        },
+        {
+          "id": "family_012",
+          "english": "baby",
+          "chinese": "婴儿"
+        },
+        {
+          "id": "family_013",
+          "english": "boy",
+          "chinese": "男孩"
+        },
+        {
+          "id": "family_014",
+          "english": "girl",
+          "chinese": "女孩"
+        },
+        {
+          "id": "family_015",
+          "english": "family",
+          "chinese": "家庭"
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "食物",
+      "icon": "🍎",
+      "words": [
+        {
+          "id": "food_001",
+          "english": "apple",
+          "chinese": "苹果"
+        },
+        {
+          "id": "food_002",
+          "english": "banana",
+          "chinese": "香蕉"
+        },
+        {
+          "id": "food_003",
+          "english": "fruit",
+          "chinese": "水果"
+        },
+        {
+          "id": "food_004",
+          "english": "carrot",
+          "chinese": "胡萝卜"
+        },
+        {
+          "id": "food_005",
+          "english": "vegetable",
+          "chinese": "蔬菜"
+        },
+        {
+          "id": "food_006",
+          "english": "fresh",
+          "chinese": "新鲜的"
+        },
+        {
+          "id": "food_007",
+          "english": "delicious",
+          "chinese": "美味的"
+        },
+        {
+          "id": "food_008",
+          "english": "rice",
+          "chinese": "米饭"
+        },
+        {
+          "id": "food_009",
+          "english": "bread",
+          "chinese": "面包"
+        },
+        {
+          "id": "food_010",
+          "english": "milk",
+          "chinese": "牛奶"
+        },
+        {
+          "id": "food_011",
+          "english": "egg",
+          "chinese": "鸡蛋"
+        },
+        {
+          "id": "food_012",
+          "english": "fish",
+          "chinese": "鱼"
+        },
+        {
+          "id": "food_013",
+          "english": "chicken",
+          "chinese": "鸡肉"
+        },
+        {
+          "id": "food_014",
+          "english": "water",
+          "chinese": "水"
+        },
+        {
+          "id": "food_015",
+          "english": "juice",
+          "chinese": "果汁"
+        }
+      ]
+    },
+    {
+      "id": "animals",
+      "name": "动物",
+      "icon": "🦁",
+      "words": [
+        {
+          "id": "animals_001",
+          "english": "cat",
+          "chinese": "猫"
+        },
+        {
+          "id": "animals_002",
+          "english": "dog",
+          "chinese": "狗"
+        },
+        {
+          "id": "animals_003",
+          "english": "bird",
+          "chinese": "鸟"
+        },
+        {
+          "id": "animals_004",
+          "english": "lion",
+          "chinese": "狮子"
+        },
+        {
+          "id": "animals_005",
+          "english": "tiger",
+          "chinese": "老虎"
+        },
+        {
+          "id": "animals_006",
+          "english": "elephant",
+          "chinese": "大象"
+        },
+        {
+          "id": "animals_007",
+          "english": "monkey",
+          "chinese": "猴子"
+        },
+        {
+          "id": "animals_008",
+          "english": "rabbit",
+          "chinese": "兔子"
+        },
+        {
+          "id": "animals_009",
+          "english": "panda",
+          "chinese": "熊猫"
+        },
+        {
+          "id": "animals_010",
+          "english": "bear",
+          "chinese": "熊"
+        },
+        {
+          "id": "animals_011",
+          "english": "horse",
+          "chinese": "马"
+        },
+        {
+          "id": "animals_012",
+          "english": "cow",
+          "chinese": "牛"
+        },
+        {
+          "id": "animals_013",
+          "english": "pig",
+          "chinese": "猪"
+        },
+        {
+          "id": "animals_014",
+          "english": "fish",
+          "chinese": "鱼"
+        },
+        {
+          "id": "animals_015",
+          "english": "butterfly",
+          "chinese": "蝴蝶"
+        }
+      ]
+    }
+  ]
+}

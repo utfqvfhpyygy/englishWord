@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英文单词听写 - 听音写单词</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #F5E6F0 0%, #E8DDF0 50%, #F0E6F5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: linear-gradient(to bottom, #ffffff 0%, #FAF7FC 100%);
+            border-radius: 30px;
+            box-shadow: 0 15px 50px rgba(200, 150, 200, 0.15);
+            max-width: 500px;
+            width: 100%;
+            overflow: hidden;
+            border: 3px solid #E8D5E8;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #D8A8D8 0%, #E8C8E8 100%);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: "✨";
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            font-size: 24px;
+            animation: twinkle 2s infinite;
+        }
+
+        .header::after {
+            content: "✨";
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            animation: twinkle 2s infinite 1s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 30px 20px;
+            min-height: 400px;
+        }
+
+        /* 页面切换 */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 首页样式 */
+        .unit-selector {
+            margin-bottom: 30px;
+        }
+
+        .unit-selector label {
+            display: block;
+            font-size: 16px;
+            color: #C89AB8;
+            margin-bottom: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .unit-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .unit-btn {
+            padding: 20px 12px;
+            border: 2px solid #E8D5E8;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+            color: #C89AB8;
+            box-shadow: 0 4px 15px rgba(200, 154, 184, 0.1);
+        }
+
+        .unit-btn:hover {
+            border-color: #C89AB8;
+            background: #F7F0F7;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(200, 154, 184, 0.15);
+        }
+
+        .unit-btn.active {
+            background: linear-gradient(135deg, #C89AB8 0%, #D8C5D8 100%);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(200, 154, 184, 0.2);
+        }
+
+        .unit-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .unit-btn.active .unit-icon {
+            animation: bounce 0.6s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .count-selector {
+            margin-bottom: 30px;
+        }
+
+        .count-selector label {
+            display: block;
+            font-size: 16px;
+            color: #C89AB8;
+            margin-bottom: 16px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .count-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .count-btn {
+            padding: 14px;
+            border: 2px solid #E8D5E8;
+            border-radius: 18px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 700;
+            color: #C89AB8;
+            box-shadow: 0 4px 15px rgba(200, 154, 184, 0.1);
+        }
+
+        .count-btn:hover {
+            border-color: #C89AB8;
+            background: #F7F0F7;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(200, 154, 184, 0.15);
+        }
+
+        .count-btn.active {
+            background: linear-gradient(135deg, #C89AB8 0%, #D8C5D8 100%);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.08);
+            box-shadow: 0 8px 25px rgba(200, 154, 184, 0.2);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #C89AB8 0%, #D8C5D8 100%);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 6px 20px rgba(200, 154, 184, 0.2);
+            letter-spacing: 1px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(200, 154, 184, 0.3);
+        }
+
+        .start-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* 听写页面样式 */
+        .progress-bar {
+            margin-bottom: 30px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #C89AB8;
+            font-weight: 600;
+        }
+
+        .progress-fill {
+            height: 8px;
+            background: #E8E0E8;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #C89AB8 0%, #D8C5D8 100%);
+            width: 0%;
+            transition: width 0.4s ease;
+            border-radius: 10px;
+        }
+
+        .word-display {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 50px;
+        }
+
+        .word-number {
+            font-size: 14px;
+            color: #D8C5D8;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .chinese-word {
+            font-size: 56px;
+            font-weight: 700;
+            color: #C89AB8;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(255, 133, 192, 0.1);
+        }
+
+        .phonetic {
+            font-size: 18px;
+            color: #D8C5D8;
+            margin-bottom: 40px;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .play-btn {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C89AB8 0%, #D8C5D8 100%);
+            color: white;
+            border: 4px solid rgba(255, 255, 255, 0.8);
+            font-size: 70px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            box-shadow: 0 8px 30px rgba(200, 154, 184, 0.2);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.12);
+            box-shadow: 0 12px 40px rgba(200, 154, 184, 0.3);
+        }
+
+        .play-btn:active {
+            transform: scale(0.98);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px;
+            border: 2px solid #E8D5E8;
+            border-radius: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #C89AB8;
+            border-color: #C89AB8;
+            box-shadow: 0 4px 12px rgba(200, 154, 184, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: #F7F0F7;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(200, 154, 184, 0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #C89AB8 0%, #D8C5D8 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(200, 154, 184, 0.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(200, 154, 184, 0.25);
+        }
+
+        /* 结果页面样式 */
+        .result-card {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #F7F0F7 0%, #E8DFE8 100%);
+            border-radius: 25px;
+            border: 2px solid #D8C5D8;
+        }
+
+        .result-title {
+            font-size: 28px;
+            color: #C89AB8;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            padding: 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(200, 154, 184, 0.1);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #D8C5D8;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #C89AB8;
+        }
+
+        .result-list {
+            text-align: left;
+            max-height: 320px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #E8DFE8;
+        }
+
+        .result-item {
+            padding: 14px;
+            border-bottom: 1px solid #E8DFE8;
+            font-size: 14px;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-english {
+            color: #C89AB8;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .result-phonetic {
+            color: #D8C5D8;
+            font-size: 12px;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+
+        .result-chinese {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .button-group-large {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .container {
+                border-radius: 25px;
+                border-width: 2px;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .chinese-word {
+                font-size: 48px;
+            }
+
+            .play-btn {
+                width: 120px;
+                height: 120px;
+                font-size: 60px;
+            }
+
+            .result-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .unit-buttons,
+            .count-buttons {
+                gap: 10px;
+            }
+
+            .unit-btn,
+            .count-btn {
+                padding: 16px 8px;
+                font-size: 12px;
+            }
+
+            .start-btn {
+                padding: 14px;
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>英文单词听写</h1>
+            <p>听音频，用笔写单词</p>
+        </div>
+
+        <div class="content">
+            <!-- 首页 -->
+            <div id="homePage" class="page active">
+                <div class="unit-selector">
+                    <label>选择学习单元</label>
+                    <div class="unit-buttons">
+                        <button class="unit-btn active" data-unit="unit1">
+                            <span class="unit-icon">📚</span>
+                            <span>Unit 1</span>
+                        </button>
+                        <button class="unit-btn" data-unit="unit2">
+                            <span class="unit-icon">📖</span>
+                            <span>Unit 2</span>
+                        </button>
+                        <button class="unit-btn" data-unit="unit3">
+                            <span class="unit-icon">✏️</span>
+                            <span>Unit 3</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="count-selector">
+                    <label>选择单词数量</label>
+                    <div class="count-buttons">
+                        <button class="count-btn" data-count="5">5个</button>
+                        <button class="count-btn active" data-count="10">10个</button>
+                        <button class="count-btn" data-count="15">15个</button>
+                    </div>
+                </div>
+
+                <button class="start-btn" id="startBtn">开始听写</button>
+            </div>
+
+            <!-- 听写页面 -->
+            <div id="dictationPage" class="page">
+                <div class="progress-bar">
+                    <div class="progress-info">
+                        <span id="progressText">1/10</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-fill">
+                        <div class="progress-fill-inner" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="word-display">
+                    <div class="word-number" id="wordNumber">第 1 个单词</div>
+                    <div class="chinese-word" id="chineseWord">妈妈</div>
+                    <div class="phonetic" id="phonetic">/ˈmʌðər/</div>
+                    <button class="play-btn" id="playBtn" title="点击播放发音">🔊</button>
+                </div>
+
+                <div class="button-group" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <button class="btn btn-secondary" id="prevBtn">上一个</button>
+                    <button class="btn btn-secondary" id="homeBtn2" style="background: white; color: #C89AB8; border-color: #C89AB8;">返回首页</button>
+                    <button class="btn btn-primary" id="nextBtn">下一个</button>
+                </div>
+            </div>
+
+            <!-- 结果页面 -->
+            <div id="resultPage" class="page">
+                <div class="result-card">
+                    <div class="result-title">听写完成！</div>
+                    <div class="result-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">总单词数</div>
+                            <div class="stat-value" id="totalCount">10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 15px; color: #333;">单词汇总</h3>
+                <div class="result-list" id="resultList"></div>
+
+                <div class="button-group-large">
+                    <button class="btn btn-secondary" id="againBtn">再来一次</button>
+                    <button class="btn btn-primary" id="homeBtn">返回首页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 状态管理
+        let state = {
+            selectedUnit: "unit1",
+            selectedCount: 10,
+            currentWordIndex: 0,
+            words: [],
+            unitData: {}
+        };
+
+        // 从JSON文件加载单词数据
+        async function loadUnitData(unitName) {
+            try {
+                const response = await fetch(`${unitName}.json`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log(`Successfully loaded ${unitName}.json with ${data.words.length} words`);
+                return data;
+            } catch (error) {
+                console.error(`Failed to load ${unitName}.json:`, error);
+                // 如果加载失败，返回空数据结构以避免应用崩溃
+                return { id: unitName, name: unitName, words: [] };
+            }
+        }
+
+        // 初始化加载所有单元数据
+        async function initializeUnits() {
+            try {
+                state.unitData.unit1 = await loadUnitData("unit1");
+                state.unitData.unit2 = await loadUnitData("unit2");
+                state.unitData.unit3 = await loadUnitData("unit3");
+
+                // 检查是否成功加载
+                const loadedUnits = Object.entries(state.unitData)
+                    .filter(([key, data]) => data && data.words && data.words.length > 0)
+                    .map(([key]) => key);
+                console.log("Successfully loaded units:", loadedUnits);
+
+                // 如果unit1有数据，刷新显示
+                if (state.unitData.unit1 && state.unitData.unit1.words.length > 0) {
+                    console.log("Unit1 data is ready");
+                }
+            } catch (error) {
+                console.error("Error during initialization:", error);
+            }
+        }
+
+        // DOM 元素
+        const pages = {
+            home: document.getElementById("homePage"),
+            dictation: document.getElementById("dictationPage"),
+            result: document.getElementById("resultPage")
+        };
+
+        // 初始化
+        async function init() {
+            await initializeUnits();
+            setupEventListeners();
+        }
+
+        // 事件监听
+        function setupEventListeners() {
+            // 首页
+            document.querySelectorAll(".unit-btn").forEach(btn => {
+                btn.addEventListener("click", () => selectUnit(btn.dataset.unit, btn));
+            });
+
+            document.querySelectorAll(".count-btn").forEach(btn => {
+                btn.addEventListener("click", () => selectCount(btn.dataset.count, btn));
+            });
+
+            document.getElementById("startBtn").addEventListener("click", startDictation);
+
+            // 听写页面
+            document.getElementById("playBtn").addEventListener("click", playSound);
+            document.getElementById("nextBtn").addEventListener("click", nextWord);
+            document.getElementById("prevBtn").addEventListener("click", prevWord);
+            document.getElementById("homeBtn2").addEventListener("click", goHome);
+
+            // 结果页面
+            document.getElementById("againBtn").addEventListener("click", startDictation);
+            document.getElementById("homeBtn").addEventListener("click", goHome);
+        }
+
+        // 首页逻辑
+        function selectUnit(unit, btn) {
+            state.selectedUnit = unit;
+            document.querySelectorAll(".unit-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+
+        function selectCount(count, btn) {
+            state.selectedCount = parseInt(count);
+            document.querySelectorAll(".count-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+
+        // 开始听写
+        function startDictation() {
+            const unitData = state.unitData[state.selectedUnit];
+
+            console.log("Start dictation with unit:", state.selectedUnit);
+            console.log("Unit data:", unitData);
+
+            if (!unitData || !unitData.words || unitData.words.length === 0) {
+                alert(`无法加载 ${state.selectedUnit} 的单词数据，请刷新页面后重试`);
+                return;
+            }
+
+            const allWords = unitData.words;
+            state.currentWordIndex = 0;
+
+            console.log(`Total words in unit: ${allWords.length}, selected count: ${state.selectedCount}`);
+
+            // 随机选择单词
+            const shuffled = [...allWords].sort(() => Math.random() - 0.5);
+            state.words = shuffled.slice(0, state.selectedCount);
+
+            console.log("Selected words:", state.words);
+
+            showPage("dictation");
+            displayWord(0);
+        }
+
+        // 显示单词
+        function displayWord(index) {
+            state.currentWordIndex = index;
+            const word = state.words[index];
+
+            document.getElementById("wordNumber").textContent = `第 ${index + 1} 个单词`;
+            document.getElementById("chineseWord").textContent = word.chinese;
+            document.getElementById("phonetic").textContent = word.phonetic;
+
+            // 更新进度
+            const progress = ((index + 1) / state.words.length) * 100;
+            document.getElementById("progressFill").style.width = progress + "%";
+            document.getElementById("progressText").textContent = `${index + 1}/${state.words.length}`;
+            document.getElementById("progressPercent").textContent = Math.round(progress) + "%";
+
+            // 更新按钮
+            document.getElementById("prevBtn").disabled = index === 0;
+
+            // 自动播放
+            setTimeout(() => playSound(), 300);
+        }
+
+        // 播放发音
+        function playSound() {
+            if (!state.words || state.words.length === 0) {
+                console.error("No words loaded");
+                return;
+            }
+
+            const word = state.words[state.currentWordIndex];
+            if (!word) {
+                console.error("Word not found at index", state.currentWordIndex);
+                return;
+            }
+
+            console.log("Playing word:", word.english);
+
+            const utterance = new SpeechSynthesisUtterance(word.english);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            // 添加事件监听以调试
+            utterance.onstart = () => console.log("Speech started");
+            utterance.onend = () => console.log("Speech ended");
+            utterance.onerror = (e) => console.error("Speech error:", e);
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // 下一个单词
+        function nextWord() {
+            if (state.currentWordIndex < state.words.length - 1) {
+                displayWord(state.currentWordIndex + 1);
+            } else {
+                showResultPage();
+            }
+        }
+
+        // 上一个单词
+        function prevWord() {
+            if (state.currentWordIndex > 0) {
+                displayWord(state.currentWordIndex - 1);
+            }
+        }
+
+        // 鼓励语言库
+        const encouragements = [
+            "🎉 太棒了！你完成得真棒！",
+            "⭐ 你是个小天才！继续加油！",
+            "💪 你做得非常出色！为自己骄傲吧！",
+            "🌟 真厉害！你进步得很快！",
+            "😍 你的努力被看到了！继续坚持！",
+            "🎊 恭喜你！你已经掌握了这些单词！",
+            "✨ 棒极了！你的发音很标准！",
+            "🏆 你是最棒的学习者！",
+            "💖 好棒呀！再努力一点就更完美了！",
+            "🚀 你像火箭一样快速进步！",
+            "👏 拍拍手！你做得非常棒！",
+            "🌈 你就像彩虹一样闪闪发光！",
+            "🎯 目标达成！你真的很厉害！",
+            "💝 你的坚持很让人感动！继续加油！",
+            "🌺 美女哦！你学英语真认真！",
+            "🎨 你的学习方式很有创意！",
+            "⚡ 快速学习者！你反应真敏捷！",
+            "🦋 你像蝴蝶一样优雅地掌握了新知识！",
+            "🌙 即使天晚了，你还在努力！真值得赞扬！",
+            "☀️ 你就像太阳一样闪耀！照亮了学习之路！"
+        ];
+
+        // 显示结果页面
+        function showResultPage() {
+            showPage("result");
+
+            document.getElementById("totalCount").textContent = state.words.length;
+
+            // 渲染单词列表
+            const resultList = document.getElementById("resultList");
+            resultList.innerHTML = "";
+
+            state.words.forEach((word, index) => {
+                const item = document.createElement("div");
+                item.className = "result-item";
+                item.innerHTML = `
+                    <div class="result-english">${index + 1}. ${word.english}</div>
+                    <div class="result-phonetic">${word.phonetic}</div>
+                    <div class="result-chinese">${word.chinese}</div>
+                `;
+                resultList.appendChild(item);
+            });
+
+            // 显示随机鼓励语言
+            const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+            const resultTitle = document.querySelector(".result-title");
+            resultTitle.textContent = randomEncouragement;
+        }
+
+        // 返回首页
+        function goHome() {
+            showPage("home");
+        }
+
+        // 切换页面
+        function showPage(pageName) {
+            Object.values(pages).forEach(page => page.classList.remove("active"));
+            pages[pageName].classList.add("active");
+        }
+
+        // 启动
+        init();
+    </script>
+</body>
+</html>

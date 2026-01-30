@@ -1,0 +1,31 @@
+{
+  "id": "unit2",
+  "name": "Unit 2",
+  "icon": "📖",
+  "words": [
+    { "english": "clever", "chinese": "聪明的", "phonetic": "/ˈklevər/" },
+    { "english": "as", "chinese": "像...一样", "phonetic": "/æz/" },
+    { "english": "fox", "chinese": "狐狸", "phonetic": "/fɑːks/" },
+    { "english": "mouse", "chinese": "老鼠", "phonetic": "/maʊs/" },
+    { "english": "busy", "chinese": "忙碌的", "phonetic": "/ˈbɪzi/" },
+    { "english": "bee", "chinese": "蜜蜂", "phonetic": "/biː/" },
+    { "english": "slow", "chinese": "慢的", "phonetic": "/sloʊ/" },
+    { "english": "honey", "chinese": "蜂蜜", "phonetic": "/ˈhʌni/" },
+    { "english": "someone", "chinese": "某人", "phonetic": "/ˈsʌmwʌn/" },
+    { "english": "brother", "chinese": "哥哥/弟弟", "phonetic": "/ˈbrʌðər/" },
+    { "english": "room", "chinese": "房间", "phonetic": "/ruːm/" },
+    { "english": "say", "chinese": "说", "phonetic": "/seɪ/" },
+    { "english": "fast", "chinese": "快的", "phonetic": "/fæst/" },
+    { "english": "still", "chinese": "仍然", "phonetic": "/stɪl/" },
+    { "english": "hungry", "chinese": "饿的", "phonetic": "/ˈhʌŋɡri/" },
+    { "english": "rain", "chinese": "雨", "phonetic": "/reɪn/" },
+    { "english": "cat", "chinese": "猫", "phonetic": "/kæt/" },
+    { "english": "dog", "chinese": "狗", "phonetic": "/dɔːɡ/" },
+    { "english": "black", "chinese": "黑色的", "phonetic": "/blæk/" },
+    { "english": "sheep", "chinese": "羊", "phonetic": "/ʃiːp/" },
+    { "english": "dark", "chinese": "黑暗的", "phonetic": "/dɑːrk/" },
+    { "english": "duck", "chinese": "鸭子", "phonetic": "/dʌk/" },
+    { "english": "cute", "chinese": "可爱的", "phonetic": "/kjuːt/" },
+    { "english": "pig", "chinese": "猪", "phonetic": "/pɪɡ/" }
+  ]
+}

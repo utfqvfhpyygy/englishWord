@@ -1,0 +1,21 @@
+{
+  "id": "unit3",
+  "name": "Unit 3",
+  "icon": "✏️",
+  "words": [
+    { "english": "milk", "chinese": "牛奶", "phonetic": "/mɪlk/" },
+    { "english": "meat", "chinese": "肉", "phonetic": "/miːt/" },
+    { "english": "egg", "chinese": "鸡蛋", "phonetic": "/eɡ/" },
+    { "english": "chicken", "chinese": "鸡肉", "phonetic": "/ˈtʃɪkən/" },
+    { "english": "healthy", "chinese": "健康的", "phonetic": "/ˈhelθi/" },
+    { "english": "enough", "chinese": "足够的", "phonetic": "/ɪˈnʌf/" },
+    { "english": "parent", "chinese": "父母", "phonetic": "/ˈperənt/" },
+    { "english": "often", "chinese": "经常", "phonetic": "/ˈɔːfən/" },
+    { "english": "short", "chinese": "矮的", "phonetic": "/ʃɔːrt/" },
+    { "english": "candy", "chinese": "糖果", "phonetic": "/ˈkændi/" },
+    { "english": "ice cream", "chinese": "冰淇淋", "phonetic": "/ˈaɪs kriːm/" },
+    { "english": "banana", "chinese": "香蕉", "phonetic": "/bəˈnɑːnə/" },
+    { "english": "second", "chinese": "第二", "phonetic": "/ˈsekənd/" },
+    { "english": "third", "chinese": "第三", "phonetic": "/θɜːrd/" }
+  ]
+}
