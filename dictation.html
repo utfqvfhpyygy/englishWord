@@ -808,6 +808,9 @@
 
         // 开始听写
         function startDictation() {
+            // 解锁iOS音频（用户点击触发）
+            unlockAudio();
+
             const unitData = state.unitData[state.selectedUnit];
 
             console.log("Start dictation with unit:", state.selectedUnit);
@@ -858,8 +861,22 @@
             startCountdown();
         }
 
-        // 音频对象（用于有道词典发音）
-        let audioPlayer = null;
+        // 音频对象（复用同一个对象以支持iOS自动播放）
+        let audioPlayer = new Audio();
+        let audioUnlocked = false;
+
+        // 解锁iOS音频（在用户交互时调用）
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            // 播放一个静音来解锁
+            audioPlayer.src = "data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4Ljc2LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAABhgC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjEzAAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYoRwmHAAAAAAD/+xDEAAPAAAGkAAAAIAAANIAAAARMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQxBoDwAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+            audioPlayer.play().then(() => {
+                audioUnlocked = true;
+                console.log("Audio unlocked for iOS");
+            }).catch(e => {
+                console.log("Audio unlock failed:", e);
+            });
+        }
 
         // 播放发音（核心函数）
         function playSoundCore() {
@@ -879,10 +896,7 @@
             // 使用有道词典API播放发音（美音）
             const audioUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word.english)}&type=1`;
 
-            if (audioPlayer) {
-                audioPlayer.pause();
-            }
-            audioPlayer = new Audio(audioUrl);
+            audioPlayer.src = audioUrl;
             audioPlayer.play().catch(e => {
                 console.error("Audio play failed, fallback to speechSynthesis:", e);
                 // 如果有道API失败，回退到浏览器TTS
