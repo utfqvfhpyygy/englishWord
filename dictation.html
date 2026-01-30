@@ -313,7 +313,35 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
-            margin-top: 40px;
+            margin-top: 20px;
+        }
+
+        /* 倒计时样式 */
+        .countdown-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .countdown-bar {
+            height: 6px;
+            background: #E8E0E8;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .countdown-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, #C89AB8 0%, #D8C5D8 100%);
+            width: 100%;
+            transition: width 0.1s linear;
+            border-radius: 3px;
+        }
+
+        .countdown-text {
+            font-size: 14px;
+            color: #C89AB8;
+            font-weight: 600;
         }
 
         .btn {
@@ -495,6 +523,30 @@
                 padding: 12px;
                 font-size: 14px;
             }
+
+            .button-group.three-cols {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .word-display {
+                margin-top: 30px;
+                margin-bottom: 25px;
+            }
+
+            .chinese-word {
+                font-size: 42px;
+            }
+
+            .play-btn {
+                width: 100px;
+                height: 100px;
+                font-size: 50px;
+            }
+
+            .countdown-container {
+                margin-top: 20px;
+            }
         }
     </style>
 </head>
@@ -557,7 +609,14 @@
                     <button class="play-btn" id="playBtn" title="点击播放发音">🔊</button>
                 </div>
 
-                <div class="button-group" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="countdown-container">
+                    <div class="countdown-bar">
+                        <div class="countdown-bar-inner" id="countdownBar"></div>
+                    </div>
+                    <div class="countdown-text" id="countdownText">15秒后自动下一个</div>
+                </div>
+
+                <div class="button-group three-cols" style="grid-template-columns: 1fr 1fr 1fr;">
                     <button class="btn btn-secondary" id="prevBtn">上一个</button>
                     <button class="btn btn-secondary" id="homeBtn2" style="background: white; color: #C89AB8; border-color: #C89AB8;">返回首页</button>
                     <button class="btn btn-primary" id="nextBtn">下一个</button>
@@ -596,6 +655,12 @@
             words: [],
             unitData: {}
         };
+
+        // 倒计时相关
+        const COUNTDOWN_SECONDS = 15;
+        let countdownTimer = null;
+        let countdownInterval = null;
+        let remainingTime = COUNTDOWN_SECONDS;
 
         // 从JSON文件加载单词数据
         async function loadUnitData(unitName) {
@@ -733,6 +798,9 @@
 
             // 自动播放
             setTimeout(() => playSound(), 300);
+
+            // 启动倒计时
+            startCountdown();
         }
 
         // 播放发音
@@ -764,8 +832,43 @@
             window.speechSynthesis.speak(utterance);
         }
 
+        // 启动倒计时
+        function startCountdown() {
+            stopCountdown();
+            remainingTime = COUNTDOWN_SECONDS;
+            updateCountdownDisplay();
+
+            countdownInterval = setInterval(() => {
+                remainingTime -= 0.1;
+                updateCountdownDisplay();
+
+                if (remainingTime <= 0) {
+                    stopCountdown();
+                    nextWord();
+                }
+            }, 100);
+        }
+
+        // 停止倒计时
+        function stopCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }
+
+        // 更新倒计时显示
+        function updateCountdownDisplay() {
+            const bar = document.getElementById("countdownBar");
+            const text = document.getElementById("countdownText");
+            const percent = (remainingTime / COUNTDOWN_SECONDS) * 100;
+            bar.style.width = percent + "%";
+            text.textContent = `${Math.ceil(remainingTime)}秒后自动下一个`;
+        }
+
         // 下一个单词
         function nextWord() {
+            stopCountdown();
             if (state.currentWordIndex < state.words.length - 1) {
                 displayWord(state.currentWordIndex + 1);
             } else {
@@ -775,6 +878,7 @@
 
         // 上一个单词
         function prevWord() {
+            stopCountdown();
             if (state.currentWordIndex > 0) {
                 displayWord(state.currentWordIndex - 1);
             }
@@ -806,6 +910,7 @@
 
         // 显示结果页面
         function showResultPage() {
+            stopCountdown();
             showPage("result");
 
             document.getElementById("totalCount").textContent = state.words.length;
@@ -833,6 +938,7 @@
 
         // 返回首页
         function goHome() {
+            stopCountdown();
             showPage("home");
         }
 
