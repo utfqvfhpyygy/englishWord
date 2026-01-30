@@ -914,17 +914,17 @@
             updateCountdownDisplay();
 
             countdownInterval = setInterval(() => {
-                remainingTime -= 0.1;
+                remainingTime = Math.round((remainingTime - 0.1) * 10) / 10; // 避免浮点数精度问题
                 updateCountdownDisplay();
 
                 // 第10秒时播放语音（如果自动播放未被取消）
-                if (autoPlayEnabled && !played10 && remainingTime <= 10 && remainingTime > 9.9) {
+                if (autoPlayEnabled && !played10 && remainingTime === 10) {
                     played10 = true;
                     playSoundAuto();
                 }
 
                 // 第5秒时播放语音（如果自动播放未被取消）
-                if (autoPlayEnabled && !played5 && remainingTime <= 5 && remainingTime > 4.9) {
+                if (autoPlayEnabled && !played5 && remainingTime === 5) {
                     played5 = true;
                     playSoundAuto();
                 }
